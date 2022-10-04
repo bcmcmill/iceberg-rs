@@ -24,5 +24,7 @@ pub mod transaction;
 
 pub use object_store;
 
+pub mod view_spec;
+
 #[cfg(feature = "datafusion-ext")]
 pub mod datafusion;
