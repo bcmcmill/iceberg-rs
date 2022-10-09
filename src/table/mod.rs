@@ -10,14 +10,14 @@ use futures::StreamExt;
 use object_store::{path::Path, ObjectStore};
 
 use crate::{
-    catalog::{table_identifier::TableIdentifier, Catalog},
+    catalog::{identifier::Identifier, Catalog},
     model::{
         manifest_list::{ManifestFile, ManifestFileV1, ManifestFileV2},
         schema::SchemaStruct,
         snapshot::{SnapshotV1, SnapshotV2, Summary},
         table_metadata::{FormatVersion, TableMetadata},
     },
-    transaction::Transaction,
+    transaction::TableTransaction,
 };
 
 pub mod files;
@@ -28,7 +28,7 @@ pub mod table_builder;
 /// - Metastore(https://iceberg.apache.org/spec/#metastore-tables)
 enum TableType {
     FileSystem(Arc<dyn ObjectStore>),
-    Metastore(TableIdentifier, Arc<dyn Catalog>),
+    Metastore(Identifier, Arc<dyn Catalog>),
 }
 
 /// Iceberg table
@@ -43,7 +43,7 @@ pub struct Table {
 impl Table {
     /// Create a new metastore Table
     pub async fn new_metastore_table(
-        identifier: TableIdentifier,
+        identifier: Identifier,
         catalog: Arc<dyn Catalog>,
         metadata: TableMetadata,
         metadata_location: &str,
@@ -116,7 +116,7 @@ impl Table {
         })
     }
     /// Get the table identifier in the catalog. Returns None of it is a filesystem table.
-    pub fn identifier(&self) -> Option<&TableIdentifier> {
+    pub fn identifier(&self) -> Option<&Identifier> {
         match &self.table_type {
             TableType::FileSystem(_) => None,
             TableType::Metastore(identifier, _) => Some(identifier),
@@ -153,8 +153,8 @@ impl Table {
         &self.manifests
     }
     /// Create a new transaction for this table
-    pub fn new_transaction(&mut self) -> Transaction {
-        Transaction::new(self)
+    pub fn new_transaction(&mut self) -> TableTransaction {
+        TableTransaction::new(self)
     }
 }
 
