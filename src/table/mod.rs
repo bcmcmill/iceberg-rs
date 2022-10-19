@@ -26,8 +26,10 @@ pub mod table_builder;
 /// Tables can be either one of following types:
 /// - FileSystem(https://iceberg.apache.org/spec/#file-system-tables)
 /// - Metastore(https://iceberg.apache.org/spec/#metastore-tables)
-enum TableType {
+pub enum TableType {
+    /// Filesystem table
     FileSystem(Arc<dyn ObjectStore>),
+    /// Metastore table
     Metastore(Identifier, Arc<dyn Catalog>),
 }
 
