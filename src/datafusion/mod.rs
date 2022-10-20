@@ -36,6 +36,7 @@ mod pruning_statistics;
 mod schema;
 mod statistics;
 mod value;
+pub mod view;
 
 /// Iceberg table for datafusion
 pub struct DataFusionTable(Table);
