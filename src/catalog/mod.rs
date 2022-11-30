@@ -13,10 +13,8 @@ pub mod namespace;
 
 use crate::model::table_metadata::TableMetadata;
 use crate::model::view_metadata::ViewMetadata;
-use crate::table::table_builder::TableBuilder;
-use crate::view::view_builder::ViewBuilder;
+use crate::table::Table;
 use crate::view::View;
-use crate::{model::schema::SchemaV2, table::Table};
 use identifier::Identifier;
 use object_store::ObjectStore;
 
@@ -48,23 +46,12 @@ pub trait Catalog: Send + Sync {
     /// Lists all namespaces in the catalog.
     async fn list_namespaces(&self, parent: Option<&str>) -> Result<Vec<Namespace>>;
     /// Create a table from an identifier and a schema
-    async fn create_table(
-        self: Arc<Self>,
-        identifier: Identifier,
-        schema: SchemaV2,
-    ) -> Result<Relation>;
-    /// Create a view from an identifier and a schema
-    async fn create_view(
-        self: Arc<Self>,
-        identifier: Identifier,
-        schema: SchemaV2,
-    ) -> Result<Relation>;
     /// Check if a table exists
     async fn table_exists(&self, identifier: &Identifier) -> Result<bool>;
     /// Drop a table and delete all data and metadata files.
     async fn drop_table(&self, identifier: &Identifier) -> Result<()>;
     /// Load a table.
-    async fn load_table(self: Arc<Self>, identifier: Identifier) -> Result<Relation>;
+    async fn load_table(self: Arc<Self>, identifier: &Identifier) -> Result<Relation>;
     /// Invalidate cached table metadata from current catalog.
     async fn invalidate_table(&self, identifier: &Identifier) -> Result<()>;
     /// Register a table with the catalog if it doesn't exist.
@@ -80,18 +67,6 @@ pub trait Catalog: Send + Sync {
         metadata_file_location: &str,
         previous_metadata_file_location: &str,
     ) -> Result<Relation>;
-    /// Instantiate a builder to either create a table or start a create/replace transaction.
-    async fn build_table(
-        self: Arc<Self>,
-        identifier: Identifier,
-        schema: SchemaV2,
-    ) -> Result<TableBuilder>;
-    /// Instantiate a builder to either create a table or start a create/replace transaction.
-    async fn build_view(
-        self: Arc<Self>,
-        identifier: Identifier,
-        schema: SchemaV2,
-    ) -> Result<ViewBuilder>;
     /// Initialize a catalog given a custom name and a map of catalog properties.
     /// A custom Catalog implementation must have a no-arg constructor. A compute engine like Spark
     /// or Flink will first initialize the catalog without any arguments, and then call this method to
