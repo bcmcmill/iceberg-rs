@@ -31,7 +31,7 @@ impl ViewBuilder {
     /// Creates a new [TableBuilder] to create a Metastore view with some default metadata entries already set.
     pub fn new_metastore_view(
         sql: &str,
-        location: &str,
+        base_path: &str,
         schema: SchemaV2,
         identifier: Identifier,
         catalog: Arc<dyn Catalog>,
@@ -66,7 +66,7 @@ impl ViewBuilder {
             version_id: 1,
         }];
         let metadata = ViewMetadataV1 {
-            location: location.to_string(),
+            location: base_path.to_owned() + &identifier.to_string().replace(".", "/"),
             schemas: Some(vec![Schema::V2(schema)]),
             current_schema_id: Some(1),
             versions: vec![version],

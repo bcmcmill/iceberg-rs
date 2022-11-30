@@ -28,7 +28,7 @@ pub struct TableBuilder {
 impl TableBuilder {
     /// Creates a new [TableBuilder] to create a Metastore Table with some default metadata entries already set.
     pub fn new_metastore_table(
-        location: &str,
+        base_path: &str,
         schema: SchemaV2,
         identifier: Identifier,
         catalog: Arc<dyn Catalog>,
@@ -53,7 +53,7 @@ impl TableBuilder {
         };
         let metadata = TableMetadataV2 {
             table_uuid: Uuid::new_v4(),
-            location: location.to_string(),
+            location: base_path.to_owned() + &identifier.to_string().replace(".", "/"),
             last_sequence_number: 1,
             last_updated_ms: SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
