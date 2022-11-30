@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 pub mod operation;
 
-use crate::{catalog::Relation, model::schema::Schema};
+use crate::{catalog::relation::Relation, model::schema::Schema};
 
 use self::operation::Operation as ViewOperation;
 

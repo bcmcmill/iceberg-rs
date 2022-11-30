@@ -6,7 +6,7 @@ use futures::StreamExt;
 use object_store::path::Path;
 use uuid::Uuid;
 
-use crate::{catalog::Relation, model::schema::SchemaV2, table::Table};
+use crate::{catalog::relation::Relation, model::schema::SchemaV2, table::Table};
 use anyhow::{anyhow, Result};
 
 use self::operation::Operation;

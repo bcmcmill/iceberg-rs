@@ -10,7 +10,7 @@ use object_store::ObjectStore;
 use uuid::Uuid;
 
 use crate::catalog::identifier::Identifier;
-use crate::catalog::Relation;
+use crate::catalog::relation::Relation;
 use crate::model::partition::{PartitionField, Transform};
 use crate::model::sort::{NullOrder, SortDirection, SortField, SortOrder};
 use crate::model::{partition::PartitionSpec, schema::SchemaV2, table_metadata::TableMetadataV2};

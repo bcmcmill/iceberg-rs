@@ -6,37 +6,17 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use anyhow::Result;
-use serde::{self, Deserialize, Serialize};
 
 pub mod identifier;
 pub mod namespace;
 
-use crate::model::table_metadata::TableMetadata;
-use crate::model::view_metadata::ViewMetadata;
-use crate::table::Table;
-use crate::view::View;
 use identifier::Identifier;
 use object_store::ObjectStore;
 
 use self::namespace::Namespace;
+use self::relation::Relation;
 
-/// Enum for different types that can be queried like a table, for example view
-pub enum Relation {
-    /// An iceberg table
-    Table(Table),
-    /// An iceberg view
-    View(View),
-}
-
-/// Metadata of an iceberg relation
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(untagged)]
-pub enum RelationMetadata {
-    /// Table metadata
-    Table(TableMetadata),
-    /// View metadata
-    View(ViewMetadata),
-}
+pub mod relation;
 
 /// Trait to create, replace and drop tables in an iceberg catalog.
 #[async_trait::async_trait]

@@ -10,7 +10,7 @@ use object_store::ObjectStore;
 use uuid::Uuid;
 
 use crate::catalog::identifier::Identifier;
-use crate::catalog::Relation;
+use crate::catalog::relation::Relation;
 use crate::model::schema::Schema;
 use crate::model::schema::SchemaV2;
 use crate::model::view_metadata::{
