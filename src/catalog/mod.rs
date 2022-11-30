@@ -14,6 +14,7 @@ pub mod namespace;
 use crate::model::table_metadata::TableMetadata;
 use crate::model::view_metadata::ViewMetadata;
 use crate::table::table_builder::TableBuilder;
+use crate::view::view_builder::ViewBuilder;
 use crate::view::View;
 use crate::{model::schema::SchemaV2, table::Table};
 use identifier::Identifier;
@@ -52,6 +53,12 @@ pub trait Catalog: Send + Sync {
         identifier: Identifier,
         schema: SchemaV2,
     ) -> Result<Relation>;
+    /// Create a view from an identifier and a schema
+    async fn create_view(
+        self: Arc<Self>,
+        identifier: Identifier,
+        schema: SchemaV2,
+    ) -> Result<Relation>;
     /// Check if a table exists
     async fn table_exists(&self, identifier: &Identifier) -> Result<bool>;
     /// Drop a table and delete all data and metadata files.
@@ -79,6 +86,12 @@ pub trait Catalog: Send + Sync {
         identifier: Identifier,
         schema: SchemaV2,
     ) -> Result<TableBuilder>;
+    /// Instantiate a builder to either create a table or start a create/replace transaction.
+    async fn build_view(
+        self: Arc<Self>,
+        identifier: Identifier,
+        schema: SchemaV2,
+    ) -> Result<ViewBuilder>;
     /// Initialize a catalog given a custom name and a map of catalog properties.
     /// A custom Catalog implementation must have a no-arg constructor. A compute engine like Spark
     /// or Flink will first initialize the catalog without any arguments, and then call this method to
